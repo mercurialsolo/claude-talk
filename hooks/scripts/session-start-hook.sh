@@ -12,7 +12,12 @@ except:
     print('unknown')
 " 2>/dev/null)
 
+PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}"
+
 mkdir -p /tmp/claudetalk
 echo "$(date +%s)" > "/tmp/claudetalk/session-${SESSION_ID}.start"
+
+# Clear any leftover status indicator from a previous session
+bash "$PLUGIN_ROOT/scripts/status.sh" "clear" </dev/null &>/dev/null &
 
 exit 0

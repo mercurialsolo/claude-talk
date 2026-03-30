@@ -33,8 +33,9 @@ if [ -f "$START_FILE" ]; then
     fi
 fi
 
-# Long-running task — announce, notify, and bring terminal to focus
+# Long-running task — set status indicator, announce, notify, and bring terminal to focus
 VOICE=$(config_get "voices.done" "Samantha")
+bash "$PLUGIN_ROOT/scripts/status.sh" "done" </dev/null &>/dev/null &
 bash "$PLUGIN_ROOT/scripts/focus-terminal.sh" </dev/null &>/dev/null &
 bash "$PLUGIN_ROOT/scripts/speak.sh" "Done. Your turn." "$VOICE" </dev/null &>/dev/null &
 bash "$PLUGIN_ROOT/scripts/notify.sh" "Claude Code" "Task complete — ready for input" </dev/null &>/dev/null &
