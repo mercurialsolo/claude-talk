@@ -5,7 +5,7 @@
   "author": {
     "name": "Mason"
   },
-  "repository": "https://github.com/Mason/claude-talk",
+  "repository": "https://github.com/mercurialsolo/claude-talk",
   "license": "MIT",
   "keywords": ["voice", "tts", "notifications", "macos", "productivity"]
 }
