@@ -1,0 +1,11 @@
+{
+  "name": "claude-talk",
+  "version": "1.0.0",
+  "description": "Give Claude Code agents a voice. macOS TTS announcements, notifications, and terminal focus switching.",
+  "author": {
+    "name": "Mason"
+  },
+  "repository": "https://github.com/Mason/claude-talk",
+  "license": "MIT",
+  "keywords": ["voice", "tts", "notifications", "macos", "productivity"]
+}

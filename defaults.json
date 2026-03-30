@@ -1,0 +1,17 @@
+{
+  "voices": {
+    "celebrate": "Samantha",
+    "fix": "Daniel",
+    "feature": "Good News",
+    "hotfix": "Whisper",
+    "release": "Superstar",
+    "chore": "Fred",
+    "revert": "Bad News",
+    "stuck": "Junior",
+    "update": "Karen",
+    "done": "Samantha"
+  },
+  "rate": 200,
+  "min_task_seconds": 30,
+  "enabled": true
+}
