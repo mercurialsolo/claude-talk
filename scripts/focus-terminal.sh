@@ -1,11 +1,17 @@
 #!/bin/bash
 # ClaudeTalk focus — bring the correct terminal tab/pane to the foreground
 # Handles: multi-tab, split panes, tmux, iTerm2 sessions, standard terminals
-set -euo pipefail
+set -uo pipefail
+
+# Detect output target — /dev/tty if available, stdout otherwise
+TTY="/dev/stdout"
+if (printf '' > /dev/tty) 2>/dev/null; then
+    TTY="/dev/tty"
+fi
 
 # 1. Ring terminal bell — flashes/highlights the correct tab in multi-tab setups
 #    Most terminals bounce the dock icon or highlight the tab on bell
-printf '\a' > /dev/tty 2>/dev/null || true
+printf '\a' > "$TTY" 2>/dev/null || true
 
 # 2. tmux: select the right pane and window if inside tmux
 if [ -n "${TMUX:-}" ]; then
