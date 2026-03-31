@@ -8,7 +8,8 @@ When Claude finishes a long task, it speaks, sends a notification, marks the tab
 
 **From marketplace:**
 ```bash
-claude plugin add claude-talk
+claude plugin marketplace add https://github.com/mercurialsolo/claude-talk
+claude plugin install claude-talk
 ```
 
 **Global (all projects):**
