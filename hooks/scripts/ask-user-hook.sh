@@ -5,13 +5,21 @@
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}"
 
-# Set status + focus + speak
-bash "$PLUGIN_ROOT/scripts/status.sh" "waiting" 2>/dev/null
-bash "$PLUGIN_ROOT/scripts/focus-terminal.sh" 2>/dev/null
-
 CONFIG_FILE="${CLAUDE_PROJECT_DIR:-.}/.claudetalk.json"
 [ -f "$CONFIG_FILE" ] || CONFIG_FILE="$HOME/.config/claudetalk/config.json"
 [ -f "$CONFIG_FILE" ] || CONFIG_FILE="$PLUGIN_ROOT/defaults.json"
+
+# Enabled check only — this hook is critical (fires in all verbosity modes)
+ENABLED=$(python3 -c "
+import json
+with open('$CONFIG_FILE') as f:
+    print(json.load(f).get('enabled', True))
+" 2>/dev/null || echo True)
+[ "$ENABLED" = "False" ] && exit 0
+
+# Set status + focus + speak
+bash "$PLUGIN_ROOT/scripts/status.sh" "waiting" 2>/dev/null
+bash "$PLUGIN_ROOT/scripts/focus-terminal.sh" 2>/dev/null
 
 VOICE=$(python3 -c "
 import json

@@ -13,5 +13,6 @@
   },
   "rate": 200,
   "min_task_seconds": 120,
-  "enabled": true
+  "enabled": true,
+  "verbosity": "normal"
 }

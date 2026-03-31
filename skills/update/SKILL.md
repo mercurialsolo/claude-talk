@@ -24,6 +24,13 @@ If `.claudetalk.json` exists in the project root, read voice override from `voic
 - At natural milestones worth noting
 - Before starting a notably different phase of work
 
+## Verbosity
+
+This skill requires **verbose** mode. Before using proactively, check `.claudetalk.json` for `"verbosity"`:
+- `"quiet"` or `"normal"` → do NOT speak proactively, just use text
+- `"verbose"` → speak freely
+- If the user explicitly invoked `/update`, always speak regardless of verbosity
+
 ## When NOT to use
 
 - For every small step (too noisy)

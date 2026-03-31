@@ -18,10 +18,22 @@ except:
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}"
 
-# Read config once if it exists (fast path: just read the JSON directly)
+# Read config once if it exists
 CONFIG_FILE="${CLAUDE_PROJECT_DIR:-.}/.claudetalk.json"
 [ -f "$CONFIG_FILE" ] || CONFIG_FILE="$HOME/.config/claudetalk/config.json"
 [ -f "$CONFIG_FILE" ] || CONFIG_FILE="$PLUGIN_ROOT/defaults.json"
+
+# Check enabled + verbosity (this hook requires "normal" or "verbose")
+eval "$(python3 -c "
+import json
+with open('$CONFIG_FILE') as f:
+    d = json.load(f)
+print(f'ENABLED={d.get(\"enabled\", True)}')
+print(f'VERBOSITY={d.get(\"verbosity\", \"normal\")}')
+" 2>/dev/null || echo -e 'ENABLED=True\nVERBOSITY=normal')"
+
+[ "$ENABLED" = "False" ] && exit 0
+[ "$VERBOSITY" = "quiet" ] && exit 0
 
 read_voice() {
     local key="$1" default="$2"

@@ -17,6 +17,11 @@ PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}"
 mkdir -p /tmp/claudetalk
 echo "$(date +%s)" > "/tmp/claudetalk/session-${SESSION_ID}.start"
 
+# Clean up stale artifacts
+rm -f /tmp/claudetalk-debug.log 2>/dev/null
+find /tmp/claudetalk -name "*.start" -mtime +1 -delete 2>/dev/null
+rmdir /tmp/claudetalk-speaking.lock 2>/dev/null
+
 # Clear any leftover status indicator from a previous session
 bash "$PLUGIN_ROOT/scripts/status.sh" "clear" </dev/null &>/dev/null &
 

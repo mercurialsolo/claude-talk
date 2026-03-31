@@ -32,11 +32,23 @@ Users can override voices and behavior with `.claudetalk.json` in their project 
   "voices": { "done": "Karen", "stuck": "Samantha" },
   "rate": 180,
   "min_task_seconds": 60,
-  "enabled": true
+  "enabled": true,
+  "verbosity": "normal"
 }
 ```
 
 Config precedence: project `.claudetalk.json` > `~/.config/claudetalk/config.json` > plugin `defaults.json`.
+
+## Verbosity modes
+
+| Mode | What fires |
+|------|-----------|
+| **quiet** | Only critical: AskUserQuestion hook, /stuck command |
+| **normal** | Quiet + git events (commit/push/merge) + long task completion (>120s) |
+| **verbose** | Normal + proactive celebrations and progress updates via skills |
+
+Default is `normal`. Use `/verbosity quiet` or `/verbosity verbose` to change.
+Use `/disable` to silence completely, `/enable` to turn back on.
 
 ## How to notify
 
@@ -85,7 +97,8 @@ Detect terminal from `$TERM_PROGRAM`:
 
 - **SessionStart**: Records start time, clears leftover status indicators
 - **PostToolUse (Bash)**: Auto-celebrates git commits, merges, pushes with voice
-- **Stop**: Sets "done" status indicator + announces completion + focuses terminal — only if task ran longer than `min_task_seconds` (default 30s)
+- **PostToolUse (AskUserQuestion)**: Sets "waiting" status + focuses terminal + speaks when Claude asks user a question (fires in all verbosity modes)
+- **Stop**: Sets "done" status indicator + announces completion + focuses terminal — only if task ran longer than `min_task_seconds` (default 120s)
 - **Multi-agent safe**: Lock file prevents overlapping TTS; bell targets the correct tab
 
 ## Guidelines

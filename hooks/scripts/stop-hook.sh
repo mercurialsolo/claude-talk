@@ -23,9 +23,15 @@ eval "$(python3 -c "
 import json
 with open('$CONFIG_FILE') as f:
     d = json.load(f)
+print(f'ENABLED={d.get(\"enabled\", True)}')
+print(f'VERBOSITY={d.get(\"verbosity\", \"normal\")}')
 print(f'MIN_SECONDS={d.get(\"min_task_seconds\", 120)}')
 print(f'VOICE={d.get(\"voices\",{}).get(\"done\",\"Samantha\")}')
-" 2>/dev/null || echo -e 'MIN_SECONDS=120\nVOICE=Samantha')"
+" 2>/dev/null || echo -e 'ENABLED=True\nVERBOSITY=normal\nMIN_SECONDS=120\nVOICE=Samantha')"
+
+# Skip if disabled or quiet mode
+[ "$ENABLED" = "False" ] && { echo '{"decision": "approve"}'; exit 0; }
+[ "$VERBOSITY" = "quiet" ] && { echo '{"decision": "approve"}'; exit 0; }
 
 # Check elapsed time — skip short tasks
 START_FILE="/tmp/claudetalk/session-${SESSION_ID}.start"

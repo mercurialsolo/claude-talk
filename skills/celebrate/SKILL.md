@@ -25,6 +25,13 @@ Match the voice to the type of work:
 
 If `.claudetalk.json` exists in the project root, read voice overrides from it.
 
+## Verbosity
+
+This skill requires **verbose** mode. Before using proactively, check `.claudetalk.json` for `"verbosity"`:
+- `"quiet"` or `"normal"` → do NOT speak proactively, just use text
+- `"verbose"` → speak freely
+- If the user explicitly invoked `/celebrate`, always speak regardless of verbosity
+
 ## Guidelines
 
 - Craft unique messages based on the actual commit/PR title — vary the opening, add personality
