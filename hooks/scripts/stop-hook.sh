@@ -1,11 +1,9 @@
 #!/bin/bash
 # ClaudeTalk Stop hook — announce completion for long-running tasks
-# Skips voice if task was shorter than min_task_seconds (default 30s).
-# Uses lock to prevent multiple agents speaking at once.
-set -euo pipefail
+# Skips voice if task was shorter than min_task_seconds.
+# Kept lightweight (no config.sh) to stay within hook timeout.
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}"
-source "$PLUGIN_ROOT/scripts/config.sh"
 
 INPUT=$(cat)
 SESSION_ID=$(echo "$INPUT" | python3 -c "
@@ -17,8 +15,24 @@ except:
     print('unknown')
 " 2>/dev/null)
 
+# Read config once if it exists
+CONFIG_FILE="${CLAUDE_PROJECT_DIR:-.}/.claudetalk.json"
+[ -f "$CONFIG_FILE" ] || CONFIG_FILE="$HOME/.config/claudetalk/config.json"
+[ -f "$CONFIG_FILE" ] || CONFIG_FILE="$PLUGIN_ROOT/defaults.json"
+
+MIN_SECONDS=$(python3 -c "
+import json
+with open('$CONFIG_FILE') as f:
+    print(json.load(f).get('min_task_seconds', 30))
+" 2>/dev/null || echo 30)
+
+VOICE=$(python3 -c "
+import json
+with open('$CONFIG_FILE') as f:
+    print(json.load(f).get('voices',{}).get('done','Samantha'))
+" 2>/dev/null || echo Samantha)
+
 # Check elapsed time — skip short tasks
-MIN_SECONDS=$(config_get "min_task_seconds" "30")
 START_FILE="/tmp/claudetalk/session-${SESSION_ID}.start"
 
 if [ -f "$START_FILE" ]; then
@@ -33,12 +47,10 @@ if [ -f "$START_FILE" ]; then
     fi
 fi
 
-# Long-running task — set status indicator, announce, notify, and bring terminal to focus
-VOICE=$(config_get "voices.done" "Samantha")
-bash "$PLUGIN_ROOT/scripts/status.sh" "done"
-bash "$PLUGIN_ROOT/scripts/focus-terminal.sh"
-nohup bash "$PLUGIN_ROOT/scripts/notify.sh" "Claude Code" "Task complete — ready for input" </dev/null &>/dev/null &
-bash "$PLUGIN_ROOT/scripts/speak.sh" "Done. Your turn." "$VOICE"
+# Long-running task — status, focus, speak
+bash "$PLUGIN_ROOT/scripts/status.sh" "done" 2>/dev/null
+bash "$PLUGIN_ROOT/scripts/focus-terminal.sh" 2>/dev/null
+/usr/bin/say -v "$VOICE" "Done. Your turn."
 
 echo '{"decision": "approve"}'
 exit 0
