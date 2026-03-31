@@ -1,0 +1,18 @@
+{
+  "name": "claude-talk",
+  "owner": {
+    "name": "Mason"
+  },
+  "metadata": {
+    "description": "Give Claude Code agents a voice — TTS, notifications, and terminal focus",
+    "homepage": "https://github.com/mercurialsolo/claude-talk"
+  },
+  "plugins": [
+    {
+      "name": "claude-talk",
+      "version": "1.0.0",
+      "source": "./",
+      "description": "Give Claude Code agents a voice. macOS TTS announcements, notifications, and terminal focus switching."
+    }
+  ]
+}
