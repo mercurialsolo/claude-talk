@@ -33,24 +33,24 @@ if echo "$COMMAND" | grep -qE '^git commit'; then
         *)                  VOICE=$(config_get "voices.celebrate" "Samantha"); ANNOUNCE="Committed. $MSG" ;;
     esac
 
-    bash "$PLUGIN_ROOT/scripts/speak.sh" "$ANNOUNCE" "$VOICE" </dev/null &>/dev/null &
-    bash "$PLUGIN_ROOT/scripts/notify.sh" "ClaudeTalk" "$MSG" </dev/null &>/dev/null &
+    nohup bash "$PLUGIN_ROOT/scripts/notify.sh" "ClaudeTalk" "$MSG" </dev/null &>/dev/null &
+    bash "$PLUGIN_ROOT/scripts/speak.sh" "$ANNOUNCE" "$VOICE"
     exit 0
 fi
 
 # Git merge
 if echo "$COMMAND" | grep -qE '^git merge'; then
     VOICE=$(config_get "voices.celebrate" "Samantha")
-    bash "$PLUGIN_ROOT/scripts/speak.sh" "Branches united. Ship it!" "$VOICE" </dev/null &>/dev/null &
-    bash "$PLUGIN_ROOT/scripts/notify.sh" "ClaudeTalk" "Branch merged" </dev/null &>/dev/null &
+    nohup bash "$PLUGIN_ROOT/scripts/notify.sh" "ClaudeTalk" "Branch merged" </dev/null &>/dev/null &
+    bash "$PLUGIN_ROOT/scripts/speak.sh" "Branches united. Ship it!" "$VOICE"
     exit 0
 fi
 
 # Git push
 if echo "$COMMAND" | grep -qE '^git push'; then
     VOICE=$(config_get "voices.release" "Superstar")
-    bash "$PLUGIN_ROOT/scripts/speak.sh" "Shipped! To production and beyond." "$VOICE" </dev/null &>/dev/null &
-    bash "$PLUGIN_ROOT/scripts/notify.sh" "ClaudeTalk" "Code pushed to remote" </dev/null &>/dev/null &
+    nohup bash "$PLUGIN_ROOT/scripts/notify.sh" "ClaudeTalk" "Code pushed to remote" </dev/null &>/dev/null &
+    bash "$PLUGIN_ROOT/scripts/speak.sh" "Shipped! To production and beyond." "$VOICE"
     exit 0
 fi
 
