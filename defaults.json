@@ -12,6 +12,6 @@
     "done": "Samantha"
   },
   "rate": 200,
-  "min_task_seconds": 30,
+  "min_task_seconds": 120,
   "enabled": true
 }
