@@ -20,7 +20,7 @@ except:
 [ -z "$COMMAND" ] && exit 0
 
 # Git commit
-if echo "$COMMAND" | grep -qE '^git commit'; then
+if echo "$COMMAND" | grep -qE 'git commit'; then
     MSG=$(git log -1 --pretty=%s 2>/dev/null || echo "new commit")
     CLEAN=$(echo "$MSG" | sed 's/^[^:]*: *//')
 
@@ -39,7 +39,7 @@ if echo "$COMMAND" | grep -qE '^git commit'; then
 fi
 
 # Git merge
-if echo "$COMMAND" | grep -qE '^git merge'; then
+if echo "$COMMAND" | grep -qE 'git merge'; then
     VOICE=$(config_get "voices.celebrate" "Samantha")
     nohup bash "$PLUGIN_ROOT/scripts/notify.sh" "ClaudeTalk" "Branch merged" </dev/null &>/dev/null &
     bash "$PLUGIN_ROOT/scripts/speak.sh" "Branches united. Ship it!" "$VOICE"
@@ -47,7 +47,7 @@ if echo "$COMMAND" | grep -qE '^git merge'; then
 fi
 
 # Git push
-if echo "$COMMAND" | grep -qE '^git push'; then
+if echo "$COMMAND" | grep -qE 'git push'; then
     VOICE=$(config_get "voices.release" "Superstar")
     nohup bash "$PLUGIN_ROOT/scripts/notify.sh" "ClaudeTalk" "Code pushed to remote" </dev/null &>/dev/null &
     bash "$PLUGIN_ROOT/scripts/speak.sh" "Shipped! To production and beyond." "$VOICE"
